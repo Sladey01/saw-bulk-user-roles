@@ -16,8 +16,20 @@ console = Console()
 
 class ArrowKeyVisualManager:
     def __init__(self):
-        self.api_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyZWdpb24iOiJ1c19lYXN0IiwianRpIjoiU2Z0enNlNldNOEJxIn0.D0R8UpCoAvEXwx8OhMpABbpkW3hbbm1PdJ3SWDUVyZQ"
-        self.base_url = "https://api.probely.com"
+        # self.api_token = "HARDCODED_TOKEN_REMOVED"
+        # Import config at runtime to avoid circular imports
+        try:
+            from config import Config
+            Config.validate()
+            self.api_token = Config.API_TOKEN
+            self.base_url = Config.API_BASE_URL
+        except (ImportError, ValueError) as e:
+            # Fallback to environment variables or default
+            self.api_token = os.getenv("PROBELY_API_TOKEN")
+            self.base_url = os.getenv("PROBELY_API_BASE_URL", "https://api.probely.com")
+            
+            if not self.api_token:
+                raise ValueError("PROBELY_API_TOKEN environment variable is required. Please set it or update config.py")
         self.headers = {
             'Authorization': f'JWT {self.api_token}',
             'Content-Type': 'application/json',
