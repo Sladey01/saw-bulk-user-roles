@@ -63,19 +63,43 @@ This tool uses the **Snyk API & Web** (formerly Probely API) for user role manag
 - **API Reference**: [Snyk API & Web Documentation](https://developers.probely.com/api/reference/)
 - **Authentication**: JWT token-based authentication
 
-### Setup
-Edit `config.py` to set your API credentials:
+### How Configuration Works
+The tool uses a two-file configuration system:
+- **`config.py`** - Handles the logic and loads your settings
+- **`.env`** - Stores your actual API token (never committed to git)
 
-```python
-API_TOKEN = "your_snyk_api_web_token_here"
-BASE_URL = "https://api.probely.com"  # Snyk API & Web endpoint
-```
+### Quick Setup (Recommended)
+1. **Copy the template**:
+   ```bash
+   cp env.example .env
+   ```
+
+2. **Edit `.env` with your actual token**:
+   ```bash
+   nano .env
+   ```
+   Your `.env` file should look like:
+   ```bash
+   PROBELY_API_TOKEN=your_actual_token_here
+   PROBELY_API_BASE_URL=https://api.probely.com
+   ```
+
+3. **Run the tool**:
+   ```bash
+   python saw_bulk_user_roles.py
+   ```
 
 ### Getting Your API Token
 1. Log in to your Snyk account
 2. Go to Account Settings → API tokens
 3. Create a new API token with user role management permissions
-4. Copy the token to your `config.py` file
+4. **Never commit your actual token to version control!**
+
+### Why This Setup?
+- ✅ **Secure**: Your token stays local and private
+- ✅ **Convenient**: No need to set environment variables manually
+- ✅ **Standard**: Follows Python development best practices
+- ✅ **Flexible**: Easy to manage different tokens for different environments
 
 ## 📋 Requirements
 
@@ -106,9 +130,23 @@ BASE_URL = "https://api.probely.com"  # Snyk API & Web endpoint
 
 ## 🆘 Troubleshooting
 
+### Common Issues
 - **Arrow Keys Not Working**: Ensure terminal supports ANSI escape sequences
 - **API Errors**: Check your Snyk API & Web token and permissions
 - **Selection Issues**: Use SPACE to toggle, not ENTER
+
+### Configuration Issues
+- **"API token required" error**: Make sure you have created `.env` from `env.example`
+- **"Module not found" error**: Install dependencies with `pip install -r requirements.txt`
+- **"Authentication failed" error**: Verify your API token is correct and has proper permissions
+
+### Alternative Setup (Advanced Users)
+If you prefer to use environment variables directly instead of `.env`:
+```bash
+export PROBELY_API_TOKEN="your_token_here"
+export PROBELY_API_BASE_URL="https://api.probely.com"
+python saw_bulk_user_roles.py
+```
 
 ## 🔌 API Endpoints
 
